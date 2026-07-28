@@ -42,8 +42,18 @@ export default function Home() {
           ))}
         </nav>
         <div className="flex items-center gap-6 text-[var(--color-off-white)]">
-          <button aria-label="Buscar">🔍</button>
-          <button aria-label="Carrito">👜</button>
+          <button aria-label="Buscar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+              <circle cx="11" cy="11" r="7.5" />
+              <line x1="21" y1="21" x2="16.2" y2="16.2" />
+            </svg>
+          </button>
+          <button aria-label="Carrito">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+              <path d="M6.5 8.5h11l1 12.5h-13z" />
+              <path d="M9 8.5v-2a3 3 0 0 1 6 0v2" />
+            </svg>
+          </button>
         </div>
       </header>
 
