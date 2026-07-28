@@ -59,7 +59,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex h-[760px] bg-[var(--color-bg-black)]">
-        <div className="flex w-full flex-col justify-center gap-6 px-16">
+        <div className="flex w-full max-w-[720px] flex-col justify-center gap-6 px-16">
           <span className="w-fit border border-[var(--color-accent-blue)] px-4 py-2 text-xs font-semibold tracking-[0.2em] text-[var(--color-accent-blue)]">
             COLECCIÓN 2026
           </span>
@@ -101,6 +101,10 @@ export default function Home() {
           {categories.map((cat) => (
             <div key={cat.label} className="relative h-[480px] w-full overflow-hidden">
               <Image src={cat.image} alt={cat.label} fill className="object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0ADD] to-transparent" />
+              <span className="font-display absolute bottom-6 left-6 text-2xl font-semibold text-[var(--color-off-white)]">
+                {cat.label}
+              </span>
             </div>
           ))}
         </div>
