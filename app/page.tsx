@@ -3,14 +3,12 @@ import Image from "next/image";
 const navLinks = [
   { label: "Novedades", accent: false },
   { label: "Hombre", accent: false },
-  { label: "Mujer", accent: false },
   { label: "Accesorios", accent: false },
   { label: "Rebajas", accent: true },
 ];
 
 const categories = [
   { label: "Hombre", image: "/images/EcQ0E.jpeg" },
-  { label: "Mujer", image: "/images/HWXNB.jpeg" },
   { label: "Abrigos", image: "/images/o4iKs.jpeg" },
   { label: "Accesorios", image: "/images/b25Nk.jpeg" },
 ];
@@ -18,7 +16,7 @@ const categories = [
 const products = [
   { name: "Trench coat clásico", price: "$189.999", image: "/images/enPlO.jpeg" },
   { name: "Mocasín de cuero", price: "$149.999", image: "/images/EOQC8.jpeg" },
-  { name: "Vestido camisero de seda", price: "$99.999", image: "/images/FPWwb.jpeg" },
+  { name: "Blazer de lana a medida", price: "$99.999", image: "/images/FPWwb.jpeg" },
   { name: "Sweater de lana merino", price: "$114.999", image: "/images/7l4gK.jpeg" },
 ];
 
@@ -200,7 +198,7 @@ export default function Home() {
             <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
               PRODUCTOS
             </span>
-            {["Hombre", "Mujer", "Abrigos", "Accesorios"].map((i) => (
+            {["Hombre", "Abrigos", "Accesorios"].map((i) => (
               <span key={i} className="text-sm text-[var(--color-text-muted)]">
                 {i}
               </span>
