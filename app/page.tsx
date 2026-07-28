@@ -59,16 +59,16 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex h-[760px] bg-[var(--color-bg-black)]">
-        <div className="flex w-full max-w-[720px] flex-col justify-center gap-6 px-16">
+        <div className="flex w-[600px] shrink-0 flex-col justify-center gap-6 px-16">
           <span className="w-fit border border-[var(--color-accent-blue)] px-4 py-2 text-xs font-semibold tracking-[0.2em] text-[var(--color-accent-blue)]">
             COLECCIÓN 2026
           </span>
-          <h1 className="font-display max-w-[640px] text-7xl font-bold leading-[0.95] text-[var(--color-off-white)]">
+          <h1 className="font-display text-7xl font-bold leading-[0.95] text-[var(--color-off-white)]">
             Elegancia
             <br />
             sin tiempo
           </h1>
-          <p className="max-w-[480px] text-[17px] leading-relaxed text-[var(--color-text-muted)]">
+          <p className="text-[17px] leading-relaxed text-[var(--color-text-muted)]">
             Prendas cortadas a medida, en materiales nobles, pensadas para durar más
             que una temporada.
           </p>
@@ -87,7 +87,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="relative h-full w-[640px] shrink-0">
+        <div className="relative h-full flex-1">
           <Image src="/images/uDf7j.jpeg" alt="Colección Leonardo Porto" fill className="object-cover" priority />
         </div>
       </section>
