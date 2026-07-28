@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg-black: #111111;
+  --color-bg-navy: #151e2e;
+  --color-accent-blue: #33506e;
+  --color-off-white: #f5f2ec;
+  --color-text-muted: #9a9282;
+  --color-line: #2a2a28;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--color-off-white);
+  }
+
+  .font-display {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+  }
+
+  .font-body {
+    font-family: var(--font-inter), "Inter", sans-serif;
+  }
+}
