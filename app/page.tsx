@@ -82,7 +82,7 @@ export default function Home() {
         <div
           className={`${SHELL} flex flex-col items-center gap-10 pt-10 pb-16 xl:flex-row xl:gap-16 xl:pt-16 xl:pb-24`}
         >
-          <div className="flex w-full flex-col gap-5 xl:w-[560px] xl:shrink-0 xl:gap-7">
+          <div className="flex w-full flex-col items-center gap-5 text-center xl:w-[560px] xl:shrink-0 xl:items-start xl:gap-7 xl:text-left">
             <Eyebrow>COLECCIÓN 2026</Eyebrow>
             <h1 className="font-display text-5xl font-bold leading-[1.02] text-[var(--color-off-white)] sm:text-6xl lg:text-7xl">
               Elegancia
@@ -93,7 +93,7 @@ export default function Home() {
               Prendas cortadas a medida, en materiales nobles, pensadas para durar más
               que una temporada.
             </p>
-            <div className="flex flex-wrap items-center gap-5 md:gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-5 md:gap-6 xl:justify-start">
               <PillButton href="#">Comprar ahora</PillButton>
               <a href="#" className="text-sm font-semibold text-[var(--color-off-white)]">
                 Ver lookbook
@@ -117,14 +117,16 @@ export default function Home() {
       </section>
 
       {/* Categorías */}
-      <section className={`${SHELL} flex flex-col gap-8 py-16 md:gap-10 lg:py-24`}>
+      <section
+        className={`${SHELL} flex flex-col items-center gap-8 py-16 text-center sm:items-start sm:text-left md:gap-10 lg:py-24`}
+      >
         <span className="w-fit rounded-full bg-black/[0.05] px-5 py-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--color-bg-black)]">
           EXPLORÁ
         </span>
         <h2 className="font-display text-3xl font-bold text-[var(--color-bg-black)] md:text-4xl">
           Comprá por categoría
         </h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 lg:gap-8">
+        <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-3 lg:gap-8">
           {categories.map((cat) => (
             <div
               key={cat.label}
@@ -151,7 +153,7 @@ export default function Home() {
       {/* Más vendidos */}
       <section className="bg-[var(--color-bg-navy)]">
         <div className={`${SHELL} flex flex-col gap-8 py-16 md:gap-12 lg:py-24`}>
-          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+          <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:items-end sm:text-left">
             <div className="flex flex-col gap-3 md:gap-4">
               <span className="text-[11px] font-bold tracking-[0.2em] text-[var(--color-accent-blue)] md:text-xs">
                 TOP DE LA SEMANA
@@ -220,7 +222,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="flex w-full flex-col gap-5 xl:w-[480px] xl:shrink-0">
+        <div className="flex w-full flex-col items-center gap-5 text-center xl:w-[480px] xl:shrink-0 xl:items-start xl:text-left">
           <Eyebrow>NUEVA COLECCIÓN</Eyebrow>
           <h2 className="font-display text-4xl font-bold leading-[1.05] text-[var(--color-bg-black)] lg:text-5xl">
             Nueva
@@ -265,7 +267,7 @@ export default function Home() {
       <footer className="bg-[var(--color-bg-black)]">
         <div className={`${SHELL} flex flex-col gap-10 pt-14 pb-8 lg:gap-12 lg:pt-16`}>
           <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
-            <div className="flex flex-col gap-4 lg:w-72">
+            <div className="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left lg:w-72">
               <span className="font-display text-xl font-bold text-[var(--color-off-white)]">
                 Leonardo Porto
               </span>
@@ -275,9 +277,9 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:flex lg:gap-16">
+            <div className="grid grid-cols-2 gap-8 text-center sm:grid-cols-4 sm:text-left lg:flex lg:gap-16">
               {footerColumns.map((col) => (
-                <div key={col.title} className="flex flex-col gap-3.5">
+                <div key={col.title} className="flex flex-col items-center gap-3.5 sm:items-start">
                   <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
                     {col.title}
                   </span>
@@ -289,7 +291,7 @@ export default function Home() {
                 </div>
               ))}
 
-              <div className="flex flex-col gap-3.5">
+              <div className="flex flex-col items-center gap-3.5 sm:items-start">
                 <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
                   SEGUINOS
                 </span>
@@ -309,7 +311,7 @@ export default function Home() {
 
           <div className="h-px w-full bg-white/10" />
 
-          <div className="flex flex-col gap-4 text-xs text-[var(--color-text-muted)] sm:flex-row sm:justify-between">
+          <div className="flex flex-col items-center gap-4 text-center text-xs text-[var(--color-text-muted)] sm:flex-row sm:justify-between sm:text-left">
             <span>© 2026 Leonardo Porto. Todos los derechos reservados.</span>
             <div className="flex gap-6">
               <span>Privacidad</span>
