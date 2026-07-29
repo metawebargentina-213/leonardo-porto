@@ -3,16 +3,16 @@ import Image from "next/image";
 const navLinks = ["Novedades", "Hombre", "Accesorios"];
 
 const categories = [
-  { label: "Hombre", image: "/images/EcQ0E.jpeg" },
-  { label: "Abrigos", image: "/images/o4iKs.jpeg" },
-  { label: "Accesorios", image: "/images/b25Nk.jpeg" },
+  { label: "Hombre", image: "/images/4DRhU.jpeg" },
+  { label: "Abrigos", image: "/images/xczFv.jpeg" },
+  { label: "Accesorios", image: "/images/aVVsm.jpeg" },
 ];
 
 const products = [
-  { name: "Trench coat clásico", price: "$189.999", image: "/images/enPlO.jpeg" },
-  { name: "Mocasín de cuero", price: "$149.999", image: "/images/EOQC8.jpeg" },
-  { name: "Blazer de lana a medida", price: "$99.999", image: "/images/FPWwb.jpeg" },
-  { name: "Sweater de lana merino", price: "$114.999", image: "/images/7l4gK.jpeg" },
+  { name: "Trench coat clásico", price: "$189.999", image: "/images/D2Y3h.jpeg" },
+  { name: "Mocasín de cuero", price: "$149.999", image: "/images/WWwDa.jpeg" },
+  { name: "Blazer de lana a medida", price: "$99.999", image: "/images/0fffc.jpeg" },
+  { name: "Sweater de lana merino", price: "$114.999", image: "/images/HUiet.jpeg" },
 ];
 
 function ArrowIcon({ className }: { className?: string }) {
@@ -114,7 +114,7 @@ export default function Home() {
           </div>
           <div className="relative h-[640px] flex-1 rounded-[2.5rem] bg-white/[0.08] p-2.5">
             <div className="relative h-full w-full overflow-hidden rounded-[2rem]">
-              <Image src="/images/uDf7j.jpeg" alt="Colección Leonardo Porto" fill className="object-cover" priority />
+              <Image src="/images/pZwEh.jpeg" alt="Colección Leonardo Porto" fill className="object-cover" priority />
             </div>
           </div>
         </div>
@@ -186,7 +186,7 @@ export default function Home() {
       <section className="flex items-center gap-16 px-20 py-24">
         <div className="relative h-[520px] w-full rounded-[2.5rem] bg-black/[0.05] p-2.5">
           <div className="relative h-full w-full overflow-hidden rounded-[2rem]">
-            <Image src="/images/6UVVY.jpeg" alt="Nueva temporada Leonardo Porto" fill className="object-cover" />
+            <Image src="/images/43JBA.jpeg" alt="Nueva temporada Leonardo Porto" fill className="object-cover" />
           </div>
         </div>
         <div className="flex w-[480px] shrink-0 flex-col gap-5">
