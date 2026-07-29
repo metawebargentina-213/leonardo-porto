@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
-const navLinks = ["Novedades", "Hombre", "Accesorios"];
+const navLinks = [
+  { label: "Colección", href: "/productos" },
+  { label: "Abrigos", href: "/productos?categoria=Abrigos" },
+  { label: "Accesorios", href: "/productos?categoria=Accesorios" },
+];
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -10,19 +15,22 @@ export function Nav() {
   return (
     <div className="flex justify-center px-5 pt-6 pb-4 md:pt-8 md:pb-6">
       <nav className="flex w-full max-w-[720px] items-center justify-between gap-6 rounded-full bg-white/[0.08] py-3 pl-6 pr-4 backdrop-blur-md md:w-auto md:gap-11 md:py-4 md:pl-8 md:pr-5">
-        <span className="font-display text-base font-bold whitespace-nowrap text-[var(--color-off-white)] md:text-lg">
+        <Link
+          href="/"
+          className="font-display text-base font-bold whitespace-nowrap text-[var(--color-off-white)] md:text-lg"
+        >
           Leonardo Porto
-        </span>
+        </Link>
 
         <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((label) => (
-            <a
-              key={label}
-              href="#"
+          {navLinks.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
               className="text-[13px] font-medium text-[var(--color-off-white)] transition-opacity hover:opacity-70"
             >
-              {label}
-            </a>
+              {item.label}
+            </Link>
           ))}
         </div>
 
@@ -69,15 +77,15 @@ export function Nav() {
           >
             ×
           </button>
-          {navLinks.map((label) => (
-            <a
-              key={label}
-              href="#"
+          {navLinks.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
               onClick={() => setOpen(false)}
               className="font-display text-3xl font-bold text-[var(--color-off-white)]"
             >
-              {label}
-            </a>
+              {item.label}
+            </Link>
           ))}
         </div>
       )}

@@ -1,76 +1,16 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Nav } from "./Nav";
+import { Eyebrow, Footer, PillButton, SHELL } from "./ui";
+import { catalogoInicial, formatearPrecio } from "./catalogo";
 
 const categories = [
-  { label: "Hombre", image: "/images/4DRhU.jpeg" },
-  { label: "Abrigos", image: "/images/xczFv.jpeg" },
-  { label: "Accesorios", image: "/images/aVVsm.jpeg" },
+  { label: "Hombre", image: "/images/4DRhU.jpeg", href: "/productos" },
+  { label: "Abrigos", image: "/images/xczFv.jpeg", href: "/productos?categoria=Abrigos" },
+  { label: "Accesorios", image: "/images/aVVsm.jpeg", href: "/productos?categoria=Accesorios" },
 ];
 
-const products = [
-  { name: "Trench coat clásico", price: "$189.999", image: "/images/D2Y3h.jpeg" },
-  { name: "Mocasín de cuero", price: "$149.999", image: "/images/WWwDa.jpeg" },
-  { name: "Blazer de lana a medida", price: "$99.999", image: "/images/0fffc.jpeg" },
-  { name: "Sweater de lana merino", price: "$114.999", image: "/images/HUiet.jpeg" },
-];
-
-const footerColumns = [
-  { title: "PRODUCTOS", items: ["Hombre", "Abrigos", "Accesorios"] },
-  {
-    title: "AYUDA",
-    items: ["Envíos", "Cambios y devoluciones", "Guía de talles", "Contacto"],
-  },
-  {
-    title: "EMPRESA",
-    items: ["Sobre Leonardo Porto", "Sustentabilidad", "Trabajá con nosotros"],
-  },
-];
-
-const SHELL = "mx-auto w-full max-w-[1440px] px-5 md:px-10 lg:px-20";
-
-function ArrowIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-      <path d="M7 17 17 7M8 7h9v9" />
-    </svg>
-  );
-}
-
-function PillButton({
-  href,
-  children,
-  variant = "solid",
-}: {
-  href: string;
-  children: React.ReactNode;
-  variant?: "solid" | "dark";
-}) {
-  return (
-    <a
-      href={href}
-      className={`group flex w-fit shrink-0 items-center gap-3 rounded-full py-2 pl-6 pr-2 text-sm font-semibold text-[var(--color-off-white)] transition-transform active:scale-[0.98] md:gap-4 md:pl-7 ${
-        variant === "solid" ? "bg-[var(--color-accent-blue)]" : "bg-[var(--color-bg-black)]"
-      }`}
-    >
-      <span className="whitespace-nowrap">{children}</span>
-      <span
-        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 md:h-9 md:w-9 ${
-          variant === "solid" ? "bg-[var(--color-bg-black)]" : "bg-[var(--color-accent-blue)]"
-        }`}
-      >
-        <ArrowIcon className="h-4 w-4" />
-      </span>
-    </a>
-  );
-}
-
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="w-fit rounded-full border border-[var(--color-accent-blue)] px-4 py-2 text-[10px] font-semibold tracking-[0.2em] text-[var(--color-accent-blue)] md:px-5 md:text-[11px]">
-      {children}
-    </span>
-  );
-}
+const products = catalogoInicial.slice(0, 4);
 
 export default function Home() {
   return (
@@ -94,10 +34,10 @@ export default function Home() {
               que una temporada.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-5 md:gap-6 xl:justify-start">
-              <PillButton href="#">Comprar ahora</PillButton>
-              <a href="#" className="text-sm font-semibold text-[var(--color-off-white)]">
+              <PillButton href="/productos">Comprar ahora</PillButton>
+              <Link href="/productos" className="text-sm font-semibold text-[var(--color-off-white)]">
                 Ver lookbook
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -128,9 +68,10 @@ export default function Home() {
         </h2>
         <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-3 lg:gap-8">
           {categories.map((cat) => (
-            <div
+            <Link
+              href={cat.href}
               key={cat.label}
-              className="w-full rounded-[2rem] bg-black/[0.05] p-2 lg:rounded-[2.25rem]"
+              className="w-full rounded-[2rem] bg-black/[0.05] p-2 transition-colors hover:bg-black/[0.09] lg:rounded-[2.25rem]"
             >
               <div className="relative aspect-[389/504] w-full overflow-hidden rounded-[1.5rem] lg:rounded-[1.75rem]">
                 <Image
@@ -145,7 +86,7 @@ export default function Home() {
                   {cat.label}
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -162,33 +103,34 @@ export default function Home() {
                 Más vendidos
               </h2>
             </div>
-            <PillButton href="#" variant="dark">
+            <PillButton href="/productos" variant="dark">
               Ver todo
             </PillButton>
           </div>
 
           <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4 lg:gap-7">
             {products.map((p) => (
-              <div
-                key={p.name}
-                className="flex w-full flex-col gap-3 rounded-[1.5rem] bg-white/[0.05] p-2 lg:gap-3.5 lg:rounded-[1.75rem]"
+              <Link
+                href={`/productos/${p.slug}`}
+                key={p.id}
+                className="group flex w-full flex-col gap-3 rounded-[1.5rem] bg-white/[0.05] p-2 transition-colors hover:bg-white/[0.09] lg:gap-3.5 lg:rounded-[1.75rem]"
               >
                 <div className="relative aspect-[283/340] w-full overflow-hidden rounded-[1rem] bg-[var(--color-off-white)] lg:rounded-[1.25rem]">
                   <Image
-                    src={p.image}
-                    alt={p.name}
+                    src={p.imagen}
+                    alt={p.nombre}
                     fill
                     sizes="(max-width: 1023px) 50vw, 300px"
-                    className="object-cover"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
                 <p className="px-1 text-[13px] font-semibold text-[var(--color-off-white)] md:text-sm">
-                  {p.name}
+                  {p.nombre}
                 </p>
                 <p className="px-1 pb-1 text-sm font-bold text-[var(--color-accent-blue)] md:text-[15px]">
-                  {p.price}
+                  {formatearPrecio(p.precio)}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -233,7 +175,7 @@ export default function Home() {
             Cortes precisos y telas naturales, pensados para acompañar cada
             temporada sin perder vigencia.
           </p>
-          <PillButton href="#" variant="dark">
+          <PillButton href="/productos" variant="dark">
             Descubrir colección
           </PillButton>
         </div>
@@ -263,63 +205,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[var(--color-bg-black)]">
-        <div className={`${SHELL} flex flex-col gap-10 pt-14 pb-8 lg:gap-12 lg:pt-16`}>
-          <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
-            <div className="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left lg:w-72">
-              <span className="font-display text-xl font-bold text-[var(--color-off-white)]">
-                Leonardo Porto
-              </span>
-              <p className="max-w-[320px] text-sm leading-relaxed text-[var(--color-text-muted)]">
-                Indumentaria atemporal, hecha con materiales nobles y atención al
-                detalle.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-8 text-center sm:grid-cols-4 sm:text-left lg:flex lg:gap-16">
-              {footerColumns.map((col) => (
-                <div key={col.title} className="flex flex-col items-center gap-3.5 sm:items-start">
-                  <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
-                    {col.title}
-                  </span>
-                  {col.items.map((item) => (
-                    <span key={item} className="text-sm text-[var(--color-text-muted)]">
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              ))}
-
-              <div className="flex flex-col items-center gap-3.5 sm:items-start">
-                <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
-                  SEGUINOS
-                </span>
-                <div className="flex gap-3">
-                  {["IG", "YT", "X"].map((label) => (
-                    <span
-                      key={label}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.08] text-[11px] text-[var(--color-off-white)]"
-                    >
-                      {label}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="h-px w-full bg-white/10" />
-
-          <div className="flex flex-col items-center gap-4 text-center text-xs text-[var(--color-text-muted)] sm:flex-row sm:justify-between sm:text-left">
-            <span>© 2026 Leonardo Porto. Todos los derechos reservados.</span>
-            <div className="flex gap-6">
-              <span>Privacidad</span>
-              <span>Términos</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }
