@@ -4,7 +4,8 @@ export type Producto = {
   id: string;
   slug: string;
   nombre: string;
-  precio: number;
+  // null = "Consultar por WhatsApp", sin precio fijo publicado.
+  precio: number | null;
   categoria: string;
   imagen: string;
   descripcion: string;
@@ -130,6 +131,11 @@ export function formatearPrecio(precio: number) {
   return `$${precio.toLocaleString("es-AR")}`;
 }
 
+// Para mostrar en pantalla: precio real o "Consultar precio" si no tiene.
+export function textoPrecio(precio: number | null) {
+  return precio === null ? "Consultar precio" : formatearPrecio(precio);
+}
+
 export function generarSlug(nombre: string) {
   return nombre
     .toLowerCase()
@@ -144,7 +150,7 @@ export function armarLinkWhatsapp(producto: Producto, talle?: string, color?: st
     `Hola! Me interesa el ${producto.nombre}`,
     talle ? `Talle: ${talle}` : null,
     color ? `Color: ${color}` : null,
-    `Precio: ${formatearPrecio(producto.precio)}`,
+    producto.precio !== null ? `Precio: ${formatearPrecio(producto.precio)}` : "Quisiera consultar el precio.",
   ]
     .filter(Boolean)
     .join("\n");

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CATEGORIAS, Producto, formatearPrecio, generarSlug } from "../catalogo";
+import { CATEGORIAS, Producto, generarSlug, textoPrecio } from "../catalogo";
 import { useCatalogo } from "../useCatalogo";
 
 const IMAGENES = [
@@ -20,6 +20,7 @@ const IMAGENES = [
 
 const vacio = {
   nombre: "",
+  tipoPrecio: "fijo" as "fijo" | "consultar",
   precio: "",
   categoria: CATEGORIAS[0] as string,
   imagen: IMAGENES[0],
@@ -33,7 +34,8 @@ type Formulario = typeof vacio;
 function productoAFormulario(p: Producto): Formulario {
   return {
     nombre: p.nombre,
-    precio: String(p.precio),
+    tipoPrecio: p.precio === null ? "consultar" : "fijo",
+    precio: p.precio === null ? "" : String(p.precio),
     categoria: p.categoria,
     imagen: p.imagen,
     descripcion: p.descripcion,
@@ -66,10 +68,14 @@ export default function Admin() {
     e.preventDefault();
     setError("");
 
-    const precio = Number(form.precio);
     if (!form.nombre.trim()) return setError("Poné un nombre para la prenda.");
-    if (!Number.isFinite(precio) || precio <= 0)
-      return setError("El precio tiene que ser un número mayor a cero.");
+
+    let precio: number | null = null;
+    if (form.tipoPrecio === "fijo") {
+      precio = Number(form.precio);
+      if (!Number.isFinite(precio) || precio <= 0)
+        return setError("El precio tiene que ser un número mayor a cero.");
+    }
 
     const talles = form.talles
       .split(",")
@@ -173,31 +179,62 @@ export default function Admin() {
               />
             </div>
 
-            <div className="flex gap-4">
-              <div className="flex flex-1 flex-col gap-1.5">
-                <label className={etiqueta}>PRECIO</label>
+            <div className="flex flex-col gap-1.5">
+              <label className={etiqueta}>PRECIO</label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, tipoPrecio: "fijo" })}
+                  className={`flex-1 rounded-full px-3 py-2 text-[12.5px] font-medium transition-colors ${
+                    form.tipoPrecio === "fijo"
+                      ? "bg-[var(--color-bg-black)] text-[var(--color-off-white)]"
+                      : "border border-black/15 text-[var(--color-bg-black)] hover:border-black/40"
+                  }`}
+                >
+                  Precio fijo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, tipoPrecio: "consultar" })}
+                  className={`flex-1 rounded-full px-3 py-2 text-[12.5px] font-medium transition-colors ${
+                    form.tipoPrecio === "consultar"
+                      ? "bg-[var(--color-bg-black)] text-[var(--color-off-white)]"
+                      : "border border-black/15 text-[var(--color-bg-black)] hover:border-black/40"
+                  }`}
+                >
+                  Consultar por WhatsApp
+                </button>
+              </div>
+              {form.tipoPrecio === "fijo" ? (
                 <input
-                  className={campo}
+                  className={`${campo} mt-1`}
                   value={form.precio}
                   onChange={(e) => setForm({ ...form, precio: e.target.value })}
                   placeholder="89999"
                   inputMode="numeric"
                 />
-              </div>
-              <div className="flex flex-1 flex-col gap-1.5">
-                <label className={etiqueta}>CATEGORÍA</label>
-                <select
-                  className={campo}
-                  value={form.categoria}
-                  onChange={(e) => setForm({ ...form, categoria: e.target.value })}
-                >
-                  {CATEGORIAS.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              ) : (
+                <p className="mt-1 rounded-xl bg-black/[0.03] px-4 py-3 text-[12px] text-[var(--color-text-muted)]">
+                  Esta prenda va a mostrar &quot;Consultar precio&quot; en la tienda, sin un
+                  monto fijo publicado. El cliente solo va a poder escribir por WhatsApp — no
+                  se puede sumar al carrito.
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className={etiqueta}>CATEGORÍA</label>
+              <select
+                className={campo}
+                value={form.categoria}
+                onChange={(e) => setForm({ ...form, categoria: e.target.value })}
+              >
+                {CATEGORIAS.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -336,8 +373,12 @@ export default function Admin() {
                       {p.categoria}
                     </span>
                     <p className="font-semibold text-[var(--color-bg-black)]">{p.nombre}</p>
-                    <p className="text-sm font-bold text-[var(--color-accent-blue)]">
-                      {formatearPrecio(p.precio)}
+                    <p
+                      className={`text-sm font-bold ${
+                        p.precio === null ? "text-[var(--color-text-muted)]" : "text-[var(--color-accent-blue)]"
+                      }`}
+                    >
+                      {textoPrecio(p.precio)}
                     </p>
                     <p className="text-[12px] text-[var(--color-text-muted)]">
                       Talles: {p.talles.join(", ")} · {p.colores.length}{" "}

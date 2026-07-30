@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "./Nav";
 import { Eyebrow, Footer, PillButton, SHELL } from "./ui";
-import { catalogoInicial, formatearPrecio } from "./catalogo";
+import { catalogoInicial, textoPrecio } from "./catalogo";
 
 const categories = [
   { label: "Hombre", image: "/images/4DRhU.jpeg", href: "/productos" },
@@ -127,8 +127,12 @@ export default function Home() {
                 <p className="px-1 text-[13px] font-semibold text-[var(--color-off-white)] md:text-sm">
                   {p.nombre}
                 </p>
-                <p className="px-1 pb-1 text-sm font-bold text-[var(--color-accent-blue)] md:text-[15px]">
-                  {formatearPrecio(p.precio)}
+                <p
+                  className={`px-1 pb-1 text-sm font-bold md:text-[15px] ${
+                    p.precio === null ? "text-[var(--color-text-muted)]" : "text-[var(--color-accent-blue)]"
+                  }`}
+                >
+                  {textoPrecio(p.precio)}
                 </p>
               </Link>
             ))}

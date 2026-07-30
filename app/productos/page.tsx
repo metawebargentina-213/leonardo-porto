@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "../Nav";
 import { Footer, SHELL } from "../ui";
-import { CATEGORIAS, formatearPrecio } from "../catalogo";
+import { CATEGORIAS, textoPrecio } from "../catalogo";
 import { useCatalogo } from "../useCatalogo";
 import { Filtros } from "./Filtros";
 
@@ -29,8 +29,19 @@ export default function Productos() {
       return porCategoria && porTalle;
     });
 
-    if (orden === "menor") return [...lista].sort((a, b) => a.precio - b.precio);
-    if (orden === "mayor") return [...lista].sort((a, b) => b.precio - a.precio);
+    // Los productos "a consultar" (sin precio) van siempre al final al ordenar por precio.
+    if (orden === "menor")
+      return [...lista].sort((a, b) => {
+        if (a.precio === null) return 1;
+        if (b.precio === null) return -1;
+        return a.precio - b.precio;
+      });
+    if (orden === "mayor")
+      return [...lista].sort((a, b) => {
+        if (a.precio === null) return 1;
+        if (b.precio === null) return -1;
+        return b.precio - a.precio;
+      });
     return lista;
   }, [productos, categoria, talle, orden]);
 
@@ -107,8 +118,14 @@ export default function Productos() {
                     <p className="text-[13px] font-semibold text-[var(--color-bg-black)] md:text-sm">
                       {p.nombre}
                     </p>
-                    <p className="text-sm font-bold text-[var(--color-accent-blue)] md:text-[15px]">
-                      {formatearPrecio(p.precio)}
+                    <p
+                      className={`text-sm font-bold md:text-[15px] ${
+                        p.precio === null
+                          ? "text-[var(--color-text-muted)]"
+                          : "text-[var(--color-accent-blue)]"
+                      }`}
+                    >
+                      {textoPrecio(p.precio)}
                     </p>
                   </div>
                 </Link>

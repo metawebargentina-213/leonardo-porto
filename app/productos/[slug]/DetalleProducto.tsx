@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "../../Nav";
 import { Footer, SHELL } from "../../ui";
-import { armarLinkWhatsapp, formatearPrecio, WHATSAPP_NUMERO } from "../../catalogo";
+import { armarLinkWhatsapp, textoPrecio, WHATSAPP_NUMERO } from "../../catalogo";
 import { useCatalogo } from "../../useCatalogo";
 import { useCarrito } from "../../useCarrito";
 
@@ -111,8 +111,14 @@ export default function DetalleProducto({ slug }: { slug: string }) {
               <h1 className="font-display text-3xl font-bold leading-tight text-[var(--color-bg-black)] lg:text-5xl">
                 {producto.nombre}
               </h1>
-              <p className="text-2xl font-bold text-[var(--color-accent-blue)] lg:text-3xl">
-                {formatearPrecio(producto.precio)}
+              <p
+                className={`text-2xl font-bold lg:text-3xl ${
+                  producto.precio === null
+                    ? "text-[var(--color-text-muted)]"
+                    : "text-[var(--color-accent-blue)]"
+                }`}
+              >
+                {textoPrecio(producto.precio)}
               </p>
             </div>
 
@@ -173,25 +179,27 @@ export default function DetalleProducto({ slug }: { slug: string }) {
             {/* Acciones */}
             <div className="flex flex-col gap-3 pt-2">
               <div className="flex flex-col gap-3 sm:flex-row">
-                <button
-                  onClick={() => {
-                    agregar({
-                      productoId: producto.id,
-                      slug: producto.slug,
-                      nombre: producto.nombre,
-                      imagen: producto.imagen,
-                      precio: producto.precio,
-                      talle,
-                      color,
-                    });
-                    setAgregado(true);
-                    window.setTimeout(() => setAgregado(false), 2500);
-                  }}
-                  className="flex w-full items-center justify-center gap-3 rounded-full bg-[var(--color-bg-black)] px-8 py-4 text-[15px] font-bold text-[var(--color-off-white)] transition-transform active:scale-[0.98] sm:w-fit"
-                >
-                  <BolsaIcon className="h-5 w-5" />
-                  {agregado ? "Agregado ✓" : "Agregar al carrito"}
-                </button>
+                {producto.precio !== null && (
+                  <button
+                    onClick={() => {
+                      agregar({
+                        productoId: producto.id,
+                        slug: producto.slug,
+                        nombre: producto.nombre,
+                        imagen: producto.imagen,
+                        precio: producto.precio as number,
+                        talle,
+                        color,
+                      });
+                      setAgregado(true);
+                      window.setTimeout(() => setAgregado(false), 2500);
+                    }}
+                    className="flex w-full items-center justify-center gap-3 rounded-full bg-[var(--color-bg-black)] px-8 py-4 text-[15px] font-bold text-[var(--color-off-white)] transition-transform active:scale-[0.98] sm:w-fit"
+                  >
+                    <BolsaIcon className="h-5 w-5" />
+                    {agregado ? "Agregado ✓" : "Agregar al carrito"}
+                  </button>
+                )}
 
                 <a
                   href={armarLinkWhatsapp(producto, talle, color)}
@@ -200,11 +208,13 @@ export default function DetalleProducto({ slug }: { slug: string }) {
                   className="group flex w-full items-center justify-center gap-3 rounded-full bg-[#25D366] px-8 py-4 text-[15px] font-bold text-white transition-transform active:scale-[0.98] sm:w-fit"
                 >
                   <WhatsappIcon className="h-5 w-5" />
-                  Consultar
+                  {producto.precio === null ? "Consultar precio por WhatsApp" : "Consultar"}
                 </a>
               </div>
               <p className="text-[13px] text-[var(--color-text-muted)]">
-                Sumalo al carrito para pedir varias prendas juntas, o consultanos directo por esta.
+                {producto.precio === null
+                  ? "Esta prenda es a medida — te confirmamos el precio por WhatsApp."
+                  : "Sumalo al carrito para pedir varias prendas juntas, o consultanos directo por esta."}
               </p>
               {!WHATSAPP_NUMERO && (
                 <p className="rounded-xl bg-amber-100 px-4 py-3 text-[12px] text-amber-900">
@@ -244,8 +254,12 @@ export default function DetalleProducto({ slug }: { slug: string }) {
                   <p className="text-[13px] font-semibold text-[var(--color-bg-black)]">
                     {p.nombre}
                   </p>
-                  <p className="text-sm font-bold text-[var(--color-accent-blue)]">
-                    {formatearPrecio(p.precio)}
+                  <p
+                    className={`text-sm font-bold ${
+                      p.precio === null ? "text-[var(--color-text-muted)]" : "text-[var(--color-accent-blue)]"
+                    }`}
+                  >
+                    {textoPrecio(p.precio)}
                   </p>
                 </div>
               </Link>
