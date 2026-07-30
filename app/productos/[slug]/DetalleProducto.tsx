@@ -7,6 +7,16 @@ import { Nav } from "../../Nav";
 import { Footer, SHELL } from "../../ui";
 import { armarLinkWhatsapp, formatearPrecio, WHATSAPP_NUMERO } from "../../catalogo";
 import { useCatalogo } from "../../useCatalogo";
+import { useCarrito } from "../../useCarrito";
+
+function BolsaIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path d="M6.5 8.5h11l1 12.5h-13z" />
+      <path d="M9 8.5v-2a3 3 0 0 1 6 0v2" />
+    </svg>
+  );
+}
 
 function WhatsappIcon({ className }: { className?: string }) {
   return (
@@ -19,9 +29,11 @@ function WhatsappIcon({ className }: { className?: string }) {
 export default function DetalleProducto({ slug }: { slug: string }) {
   const { productos, cargado } = useCatalogo();
   const producto = productos.find((p) => p.slug === slug);
+  const { agregar } = useCarrito();
 
   const [talle, setTalle] = useState<string>("");
   const [color, setColor] = useState<string>("");
+  const [agregado, setAgregado] = useState(false);
 
   useEffect(() => {
     if (producto) {
@@ -158,19 +170,41 @@ export default function DetalleProducto({ slug }: { slug: string }) {
               </div>
             </div>
 
-            {/* WhatsApp */}
+            {/* Acciones */}
             <div className="flex flex-col gap-3 pt-2">
-              <a
-                href={armarLinkWhatsapp(producto, talle, color)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex w-full items-center justify-center gap-3 rounded-full bg-[#25D366] px-8 py-4 text-[15px] font-bold text-white transition-transform active:scale-[0.98] sm:w-fit"
-              >
-                <WhatsappIcon className="h-5 w-5" />
-                Consultar por WhatsApp
-              </a>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  onClick={() => {
+                    agregar({
+                      productoId: producto.id,
+                      slug: producto.slug,
+                      nombre: producto.nombre,
+                      imagen: producto.imagen,
+                      precio: producto.precio,
+                      talle,
+                      color,
+                    });
+                    setAgregado(true);
+                    window.setTimeout(() => setAgregado(false), 2500);
+                  }}
+                  className="flex w-full items-center justify-center gap-3 rounded-full bg-[var(--color-bg-black)] px-8 py-4 text-[15px] font-bold text-[var(--color-off-white)] transition-transform active:scale-[0.98] sm:w-fit"
+                >
+                  <BolsaIcon className="h-5 w-5" />
+                  {agregado ? "Agregado ✓" : "Agregar al carrito"}
+                </button>
+
+                <a
+                  href={armarLinkWhatsapp(producto, talle, color)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex w-full items-center justify-center gap-3 rounded-full bg-[#25D366] px-8 py-4 text-[15px] font-bold text-white transition-transform active:scale-[0.98] sm:w-fit"
+                >
+                  <WhatsappIcon className="h-5 w-5" />
+                  Consultar
+                </a>
+              </div>
               <p className="text-[13px] text-[var(--color-text-muted)]">
-                Te respondemos con disponibilidad, formas de pago y envío.
+                Sumalo al carrito para pedir varias prendas juntas, o consultanos directo por esta.
               </p>
               {!WHATSAPP_NUMERO && (
                 <p className="rounded-xl bg-amber-100 px-4 py-3 text-[12px] text-amber-900">

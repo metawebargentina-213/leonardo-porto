@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { CarritoDrawer } from "./CarritoDrawer";
+import { useCarrito } from "./useCarrito";
 
 const navLinks = [
   { label: "Colección", href: "/productos" },
@@ -11,6 +13,8 @@ const navLinks = [
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+  const [carritoAbierto, setCarritoAbierto] = useState(false);
+  const { cantidadTotal } = useCarrito();
 
   return (
     <div className="flex justify-center px-5 pt-6 pb-4 md:pt-8 md:pb-6">
@@ -41,11 +45,20 @@ export function Nav() {
               <line x1="21" y1="21" x2="16.2" y2="16.2" />
             </svg>
           </button>
-          <button aria-label="Carrito" className="transition-opacity hover:opacity-70">
+          <button
+            aria-label="Carrito"
+            onClick={() => setCarritoAbierto(true)}
+            className="relative transition-opacity hover:opacity-70"
+          >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
               <path d="M6.5 8.5h11l1 12.5h-13z" />
               <path d="M9 8.5v-2a3 3 0 0 1 6 0v2" />
             </svg>
+            {cantidadTotal > 0 && (
+              <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent-blue)] px-1 text-[9px] font-bold text-white">
+                {cantidadTotal}
+              </span>
+            )}
           </button>
 
           <button
@@ -89,6 +102,8 @@ export function Nav() {
           ))}
         </div>
       )}
+
+      <CarritoDrawer abierto={carritoAbierto} onCerrar={() => setCarritoAbierto(false)} />
     </div>
   );
 }
