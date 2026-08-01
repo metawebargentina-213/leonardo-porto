@@ -15,7 +15,9 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700"],
 });
 
+// TODO: actualizar cuando se conecte el dominio propio (leonardoporto.com en Donweb).
 export const metadata: Metadata = {
+  metadataBase: new URL("https://leonardo-porto.pages.dev"),
   title: "Leonardo Porto",
   description: "Indumentaria atemporal, hecha con materiales nobles y atención al detalle.",
 };
