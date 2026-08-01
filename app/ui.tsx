@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export const SHELL = "mx-auto w-full max-w-[1440px] px-5 md:px-10 lg:px-20";
 
 const footerColumns = [
@@ -66,9 +68,14 @@ export function Footer() {
       <div className={`${SHELL} flex flex-col gap-10 pt-14 pb-8 lg:gap-12 lg:pt-16`}>
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
           <div className="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left lg:w-72">
-            <span className="font-display text-xl font-bold text-[var(--color-off-white)]">
-              Leonardo Porto
-            </span>
+            <div className="flex items-center gap-2.5">
+              <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full ring-1 ring-white/15">
+                <Image src="/images/logo-lp.jpg" alt="" fill sizes="32px" className="object-cover" />
+              </span>
+              <span className="font-display text-xl font-bold text-[var(--color-off-white)]">
+                Leonardo Porto
+              </span>
+            </div>
             <p className="max-w-[320px] text-sm leading-relaxed text-[var(--color-text-muted)]">
               Indumentaria atemporal, hecha con materiales nobles y atención al
               detalle.

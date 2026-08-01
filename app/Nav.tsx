@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { CarritoDrawer } from "./CarritoDrawer";
 import { useCarrito } from "./useCarrito";
@@ -19,11 +20,13 @@ export function Nav() {
   return (
     <div className="flex justify-center px-5 pt-6 pb-4 md:pt-8 md:pb-6">
       <nav className="flex w-full max-w-[720px] items-center justify-between gap-6 rounded-full bg-white/[0.08] py-3 pl-6 pr-4 backdrop-blur-md md:w-auto md:gap-11 md:py-4 md:pl-8 md:pr-5">
-        <Link
-          href="/"
-          className="font-display text-base font-bold whitespace-nowrap text-[var(--color-off-white)] md:text-lg"
-        >
-          Leonardo Porto
+        <Link href="/" className="flex items-center gap-2.5">
+          <span className="relative h-7 w-7 shrink-0 overflow-hidden rounded-full ring-1 ring-white/15">
+            <Image src="/images/logo-lp.jpg" alt="" fill sizes="28px" className="object-cover" />
+          </span>
+          <span className="font-display text-base font-bold whitespace-nowrap text-[var(--color-off-white)] md:text-lg">
+            Leonardo Porto
+          </span>
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
