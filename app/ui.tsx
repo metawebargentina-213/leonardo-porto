@@ -94,13 +94,22 @@ export function Footer() {
                 SEGUINOS
               </span>
               <div className="flex gap-3">
-                {["IG", "YT", "X"].map((label) => (
-                  <span
-                    key={label}
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.08] text-[11px] text-[var(--color-off-white)]"
+                {[
+                  { label: "IG", href: "https://www.instagram.com/leonardoporto_okk/" },
+                  {
+                    label: "FB",
+                    href: "https://www.facebook.com/profile.php?id=61558631401665",
+                  },
+                ].map((red) => (
+                  <a
+                    key={red.label}
+                    href={red.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.08] text-[11px] text-[var(--color-off-white)] transition-colors hover:bg-white/[0.16]"
                   >
-                    {label}
-                  </span>
+                    {red.label}
+                  </a>
                 ))}
               </div>
             </div>
