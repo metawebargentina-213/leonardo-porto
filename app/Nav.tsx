@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CarritoDrawer } from "./CarritoDrawer";
 import { useCarrito } from "./useCarrito";
+import { useFavoritos } from "./useFavoritos";
 
 const navLinks = [
   { label: "Colección", href: "/productos" },
@@ -19,6 +20,7 @@ export function Nav() {
   const [buscadorAbierto, setBuscadorAbierto] = useState(false);
   const [busqueda, setBusqueda] = useState("");
   const { cantidadTotal } = useCarrito();
+  const { cantidad: cantidadFavoritos } = useFavoritos();
   const router = useRouter();
 
   function buscar(e: React.FormEvent) {
@@ -91,6 +93,17 @@ export function Nav() {
               </button>
             </form>
           )}
+          <Link href="/favoritos" aria-label="Favoritos" className="relative transition-opacity hover:opacity-70">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+              <path d="M12 20.5s-7.5-4.6-10-9.3C.5 7.8 2.3 4.5 5.7 4c2.1-.3 4.2.8 6.3 3.3C14.1 4.8 16.2 3.7 18.3 4c3.4.5 5.2 3.8 3.7 7.2-2.5 4.7-10 9.3-10 9.3z" />
+            </svg>
+            {cantidadFavoritos > 0 && (
+              <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent-blue)] px-1 text-[9px] font-bold text-white">
+                {cantidadFavoritos}
+              </span>
+            )}
+          </Link>
+
           <button
             aria-label="Carrito"
             onClick={() => setCarritoAbierto(true)}

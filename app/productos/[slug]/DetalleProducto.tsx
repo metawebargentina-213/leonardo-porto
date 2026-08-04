@@ -9,6 +9,8 @@ import { armarLinkWhatsapp, textoPrecio, WHATSAPP_NUMERO } from "../../catalogo"
 import { useCatalogo } from "../../useCatalogo";
 import { useCarrito } from "../../useCarrito";
 import { GuiaTalles } from "../../GuiaTalles";
+import { CorazonFavorito } from "../../CorazonFavorito";
+import { ProductoCard } from "../../ProductoCard";
 
 function BolsaIcon({ className }: { className?: string }) {
   return (
@@ -35,11 +37,13 @@ export default function DetalleProducto({ slug }: { slug: string }) {
   const [talle, setTalle] = useState<string>("");
   const [color, setColor] = useState<string>("");
   const [agregado, setAgregado] = useState(false);
+  const [imagenActiva, setImagenActiva] = useState(0);
 
   useEffect(() => {
     if (producto) {
       setTalle(producto.talles[0] ?? "");
       setColor(producto.colores[0]?.nombre ?? "");
+      setImagenActiva(0);
     }
   }, [producto]);
 
@@ -90,25 +94,53 @@ export default function DetalleProducto({ slug }: { slug: string }) {
 
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
           {/* Imagen */}
-          <div className="w-full rounded-[2rem] bg-black/[0.05] p-2 lg:w-[52%] lg:rounded-[2.5rem] lg:p-2.5">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] bg-white lg:rounded-[2rem]">
-              <Image
-                src={producto.imagen}
-                alt={producto.nombre}
-                fill
-                sizes="(max-width: 1023px) 100vw, 700px"
-                className="object-cover"
-                priority
-              />
+          <div className="w-full lg:w-[52%]">
+            <div className="relative rounded-[2rem] bg-black/[0.05] p-2 lg:rounded-[2.5rem] lg:p-2.5">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] bg-white lg:rounded-[2rem]">
+                <Image
+                  src={producto.imagenes[imagenActiva]}
+                  alt={producto.nombre}
+                  fill
+                  sizes="(max-width: 1023px) 100vw, 700px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
             </div>
+
+            {producto.imagenes.length > 1 && (
+              <div className="mt-3 flex gap-2.5 overflow-x-auto pb-1">
+                {producto.imagenes.map((img, i) => (
+                  <button
+                    key={img + i}
+                    type="button"
+                    onClick={() => setImagenActiva(i)}
+                    aria-label={`Ver foto ${i + 1}`}
+                    aria-current={imagenActiva === i}
+                    className={`relative h-20 w-16 shrink-0 overflow-hidden rounded-[0.85rem] border-2 transition-colors ${
+                      imagenActiva === i ? "border-[var(--color-accent-blue)]" : "border-transparent hover:border-black/15"
+                    }`}
+                  >
+                    <Image src={img} alt="" fill sizes="64px" className="object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Datos y selectores */}
           <div className="flex w-full flex-col gap-7 lg:flex-1 lg:pt-4">
             <div className="flex flex-col gap-3">
-              <span className="text-[11px] font-semibold tracking-[0.2em] text-[var(--color-accent-blue)]">
-                {producto.categoria.toUpperCase()}
-              </span>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-[11px] font-semibold tracking-[0.2em] text-[var(--color-accent-blue)]">
+                  {producto.categoria.toUpperCase()}
+                </span>
+                <CorazonFavorito
+                  productoId={producto.id}
+                  tamaño="lg"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/15 text-[var(--color-bg-black)] transition-colors hover:border-black/30"
+                />
+              </div>
               <h1 className="font-display text-3xl font-bold leading-tight text-[var(--color-bg-black)] lg:text-5xl">
                 {producto.nombre}
               </h1>
@@ -195,7 +227,7 @@ export default function DetalleProducto({ slug }: { slug: string }) {
                         productoId: producto.id,
                         slug: producto.slug,
                         nombre: producto.nombre,
-                        imagen: producto.imagen,
+                        imagen: producto.imagenes[0],
                         precio: producto.precio as number,
                         talle,
                         color,
@@ -245,33 +277,7 @@ export default function DetalleProducto({ slug }: { slug: string }) {
           </h2>
           <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4 lg:gap-7">
             {relacionados.map((p) => (
-              <Link
-                key={p.id}
-                href={`/productos/${p.slug}`}
-                className="group flex w-full flex-col gap-3 rounded-[1.5rem] bg-black/[0.04] p-2 transition-colors hover:bg-black/[0.07]"
-              >
-                <div className="relative aspect-[283/340] w-full overflow-hidden rounded-[1rem] bg-white">
-                  <Image
-                    src={p.imagen}
-                    alt={p.nombre}
-                    fill
-                    sizes="(max-width: 1023px) 50vw, 300px"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                </div>
-                <div className="flex flex-col gap-1 px-1 pb-1">
-                  <p className="text-[13px] font-semibold text-[var(--color-bg-black)]">
-                    {p.nombre}
-                  </p>
-                  <p
-                    className={`text-sm font-bold ${
-                      p.precio === null ? "text-[var(--color-text-muted)]" : "text-[var(--color-accent-blue)]"
-                    }`}
-                  >
-                    {textoPrecio(p.precio)}
-                  </p>
-                </div>
-              </Link>
+              <ProductoCard key={p.id} producto={p} />
             ))}
           </div>
         </section>

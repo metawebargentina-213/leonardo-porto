@@ -26,7 +26,7 @@ const vacio = {
   tipoPrecio: "fijo" as "fijo" | "consultar",
   precio: "",
   categoria: CATEGORIAS[0] as string,
-  imagen: IMAGENES[0],
+  imagenes: [] as string[],
   descripcion: "",
   talles: "",
   colores: "",
@@ -40,7 +40,7 @@ function productoAFormulario(p: Producto): Formulario {
     tipoPrecio: p.precio === null ? "consultar" : "fijo",
     precio: p.precio === null ? "" : String(p.precio),
     categoria: p.categoria,
-    imagen: p.imagen,
+    imagenes: p.imagenes,
     descripcion: p.descripcion,
     talles: p.talles.join(", "),
     colores: p.colores.map((c) => `${c.nombre}:${c.hex}`).join(", "),
@@ -110,13 +110,15 @@ export default function Admin() {
     if (colores.length === 0)
       return setError("Cargá al menos un color, con el formato Nombre:#HEX.");
 
+    if (form.imagenes.length === 0) return setError("Elegí al menos una foto.");
+
     const producto: Producto = {
       id: editandoId ?? `p-${Date.now()}`,
       slug: generarSlug(form.nombre),
       nombre: form.nombre.trim(),
       precio,
       categoria: form.categoria,
-      imagen: form.imagen,
+      imagenes: form.imagenes,
       descripcion: form.descripcion.trim(),
       talles,
       colores,
@@ -129,6 +131,15 @@ export default function Admin() {
     }
     mostrarAviso(editando ? "Producto actualizado" : "Producto agregado");
     limpiar();
+  }
+
+  function toggleImagen(img: string) {
+    setForm((f) => ({
+      ...f,
+      imagenes: f.imagenes.includes(img)
+        ? f.imagenes.filter((i) => i !== img)
+        : [...f.imagenes, img],
+    }));
   }
 
   function editar(p: Producto) {
@@ -293,26 +304,35 @@ export default function Admin() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className={etiqueta}>IMAGEN</label>
+              <label className={etiqueta}>FOTOS (elegí una o varias, en orden)</label>
               <div className="grid grid-cols-5 gap-2">
-                {IMAGENES.map((img) => (
-                  <button
-                    type="button"
-                    key={img}
-                    onClick={() => setForm({ ...form, imagen: img })}
-                    className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-colors ${
-                      form.imagen === img
-                        ? "border-[var(--color-accent-blue)]"
-                        : "border-transparent hover:border-black/20"
-                    }`}
-                  >
-                    <Image src={img} alt="" fill sizes="80px" className="object-cover" />
-                  </button>
-                ))}
+                {IMAGENES.map((img) => {
+                  const posicion = form.imagenes.indexOf(img);
+                  const seleccionada = posicion !== -1;
+                  return (
+                    <button
+                      type="button"
+                      key={img}
+                      onClick={() => toggleImagen(img)}
+                      className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-colors ${
+                        seleccionada
+                          ? "border-[var(--color-accent-blue)]"
+                          : "border-transparent hover:border-black/20"
+                      }`}
+                    >
+                      <Image src={img} alt="" fill sizes="80px" className="object-cover" />
+                      {seleccionada && (
+                        <span className="absolute top-1 left-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent-blue)] text-[11px] font-bold text-white">
+                          {posicion + 1}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
               <p className="text-[11px] text-[var(--color-text-muted)]">
-                Por ahora se elige entre las fotos ya cargadas. La subida de imágenes
-                propias entra al conectar la base de datos.
+                Se elige entre las fotos ya cargadas — la primera que toques es la
+                portada. Tocá una foto de nuevo para sacarla.
               </p>
             </div>
 
@@ -390,7 +410,7 @@ export default function Admin() {
                   className="flex flex-col gap-4 rounded-[1.25rem] border border-black/10 bg-white p-3 sm:flex-row sm:items-center"
                 >
                   <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#F4F4F2]">
-                    <Image src={p.imagen} alt={p.nombre} fill sizes="96px" className="object-cover" />
+                    <Image src={p.imagenes[0]} alt={p.nombre} fill sizes="96px" className="object-cover" />
                   </div>
 
                   <div className="flex flex-1 flex-col gap-1">

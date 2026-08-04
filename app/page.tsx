@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "./Nav";
 import { Eyebrow, Footer, PillButton, SHELL } from "./ui";
-import { textoPrecio } from "./catalogo";
 import { useCatalogo } from "./useCatalogo";
+import { ProductoCard } from "./ProductoCard";
 
 const categories = [
   { label: "Hombre", image: "/images/4DRhU.jpeg", href: "/productos" },
@@ -114,31 +114,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4 lg:gap-7">
             {products.map((p) => (
-              <Link
-                href={`/productos/${p.slug}`}
-                key={p.id}
-                className="group flex w-full flex-col gap-3 rounded-[1.5rem] bg-white/[0.05] p-2 transition-colors hover:bg-white/[0.09] lg:gap-3.5 lg:rounded-[1.75rem]"
-              >
-                <div className="relative aspect-[283/340] w-full overflow-hidden rounded-[1rem] bg-[var(--color-off-white)] lg:rounded-[1.25rem]">
-                  <Image
-                    src={p.imagen}
-                    alt={p.nombre}
-                    fill
-                    sizes="(max-width: 1023px) 50vw, 300px"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                </div>
-                <p className="px-1 text-[13px] font-semibold text-[var(--color-off-white)] md:text-sm">
-                  {p.nombre}
-                </p>
-                <p
-                  className={`px-1 pb-1 text-sm font-bold md:text-[15px] ${
-                    p.precio === null ? "text-[var(--color-text-muted)]" : "text-[var(--color-accent-blue)]"
-                  }`}
-                >
-                  {textoPrecio(p.precio)}
-                </p>
-              </Link>
+              <ProductoCard key={p.id} producto={p} oscuro />
             ))}
           </div>
         </div>

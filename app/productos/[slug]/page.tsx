@@ -29,13 +29,13 @@ export async function generateMetadata({
       title: titulo,
       description: producto.descripcion,
       url: `${SITE_URL}/productos/${producto.slug}`,
-      images: [producto.imagen],
+      images: producto.imagenes,
     },
     twitter: {
       card: "summary_large_image",
       title: titulo,
       description: producto.descripcion,
-      images: [producto.imagen],
+      images: producto.imagenes,
     },
   };
 }
@@ -55,7 +55,7 @@ export default async function ProductoPage({
         name: producto.nombre,
         description: producto.descripcion,
         category: producto.categoria,
-        image: `${SITE_URL}${producto.imagen}`,
+        image: producto.imagenes.map((img) => `${SITE_URL}${img}`),
         url: `${SITE_URL}/productos/${producto.slug}`,
         brand: { "@type": "Brand", name: "Leonardo Porto" },
         ...(producto.precio !== null

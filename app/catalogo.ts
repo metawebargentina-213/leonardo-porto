@@ -7,7 +7,8 @@ export type Producto = {
   // null = "Consultar por WhatsApp", sin precio fijo publicado.
   precio: number | null;
   categoria: string;
-  imagen: string;
+  // La primera imagen es la de portada (grillas, relacionados, WhatsApp).
+  imagenes: string[];
   descripcion: string;
   talles: string[];
   colores: Color[];
@@ -25,7 +26,7 @@ export const catalogoInicial: Producto[] = [
     nombre: "Trench coat clásico",
     precio: 189999,
     categoria: "Abrigos",
-    imagen: "/images/D2Y3h.jpeg",
+    imagenes: ["/images/D2Y3h.jpeg", "/images/pZwEh.jpeg"],
     descripcion:
       "Gabardina de algodón con forro interior, cinturón y doble botonadura. Un abrigo que resuelve el entretiempo sin esfuerzo y acompaña tanto un traje como un jean.",
     talles: ["S", "M", "L", "XL"],
@@ -40,7 +41,7 @@ export const catalogoInicial: Producto[] = [
     nombre: "Tapado de lana camel",
     precio: 224999,
     categoria: "Abrigos",
-    imagen: "/images/xczFv.jpeg",
+    imagenes: ["/images/xczFv.jpeg", "/images/43JBA.jpeg"],
     descripcion:
       "Tapado largo en paño de lana, con caída estructurada y solapa de muesca. La pieza más versátil del guardarropa de invierno.",
     talles: ["S", "M", "L", "XL"],
@@ -55,7 +56,7 @@ export const catalogoInicial: Producto[] = [
     nombre: "Blazer de lana a medida",
     precio: 99999,
     categoria: "Sastrería",
-    imagen: "/images/0fffc.jpeg",
+    imagenes: ["/images/0fffc.jpeg", "/images/4DRhU.jpeg"],
     descripcion:
       "Blazer de lana fría con corte entallado y hombro natural. Se ajusta a medida en el taller antes de la entrega.",
     talles: ["46", "48", "50", "52", "54"],
@@ -70,7 +71,7 @@ export const catalogoInicial: Producto[] = [
     nombre: "Traje azul noche",
     precio: 279999,
     categoria: "Sastrería",
-    imagen: "/images/4DRhU.jpeg",
+    imagenes: ["/images/4DRhU.jpeg", "/images/0fffc.jpeg"],
     descripcion:
       "Traje de dos piezas en lana Super 120's. Saco de dos botones y pantalón de corte recto, listo para ajustar al cuerpo.",
     talles: ["46", "48", "50", "52", "54"],
@@ -85,7 +86,7 @@ export const catalogoInicial: Producto[] = [
     nombre: "Sweater de lana merino",
     precio: 114999,
     categoria: "Prendas",
-    imagen: "/images/HUiet.jpeg",
+    imagenes: ["/images/HUiet.jpeg", "/images/pZwEh.jpeg"],
     descripcion:
       "Tejido de lana merino de hilado fino, con cuello redondo y puños acanalados. Liviano, abrigado y sin picazón.",
     talles: ["S", "M", "L", "XL"],
@@ -101,7 +102,7 @@ export const catalogoInicial: Producto[] = [
     nombre: "Mocasín de cuero",
     precio: 149999,
     categoria: "Accesorios",
-    imagen: "/images/WWwDa.jpeg",
+    imagenes: ["/images/WWwDa.jpeg", "/images/aVVsm.jpeg"],
     descripcion:
       "Mocasín de cuero vacuno con suela de cuero cosida y plantilla acolchada. Se amolda al pie con el uso.",
     talles: ["39", "40", "41", "42", "43", "44"],
@@ -116,7 +117,7 @@ export const catalogoInicial: Producto[] = [
     nombre: "Set de cuero — cinturón y billetera",
     precio: 74999,
     categoria: "Accesorios",
-    imagen: "/images/aVVsm.jpeg",
+    imagenes: ["/images/aVVsm.jpeg", "/images/WWwDa.jpeg"],
     descripcion:
       "Cinturón de cuero curtido al vegetal con hebilla de bronce macizo, y billetera a juego con ocho compartimentos.",
     talles: ["Único"],

@@ -1,13 +1,12 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Nav } from "../Nav";
 import { Footer, SHELL } from "../ui";
-import { CATEGORIAS, textoPrecio } from "../catalogo";
+import { CATEGORIAS } from "../catalogo";
 import { useCatalogo } from "../useCatalogo";
+import { ProductoCard } from "../ProductoCard";
 import { Filtros } from "./Filtros";
 
 type Orden = "destacados" | "menor" | "mayor";
@@ -129,38 +128,7 @@ function Productos() {
           ) : (
             <div className="grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-3 lg:gap-7">
               {filtrados.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/productos/${p.slug}`}
-                  className="group flex w-full flex-col gap-3 rounded-[1.5rem] bg-black/[0.04] p-2 transition-colors hover:bg-black/[0.07] lg:gap-3.5 lg:rounded-[1.75rem]"
-                >
-                  <div className="relative aspect-[283/340] w-full overflow-hidden rounded-[1rem] bg-white lg:rounded-[1.25rem]">
-                    <Image
-                      src={p.imagen}
-                      alt={p.nombre}
-                      fill
-                      sizes="(max-width: 1023px) 50vw, 300px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1 px-1 pb-1">
-                    <span className="text-[11px] tracking-wide text-[var(--color-text-muted)]">
-                      {p.categoria}
-                    </span>
-                    <p className="text-[13px] font-semibold text-[var(--color-bg-black)] md:text-sm">
-                      {p.nombre}
-                    </p>
-                    <p
-                      className={`text-sm font-bold md:text-[15px] ${
-                        p.precio === null
-                          ? "text-[var(--color-text-muted)]"
-                          : "text-[var(--color-accent-blue)]"
-                      }`}
-                    >
-                      {textoPrecio(p.precio)}
-                    </p>
-                  </div>
-                </Link>
+                <ProductoCard key={p.id} producto={p} />
               ))}
             </div>
           )}
