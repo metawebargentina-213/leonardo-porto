@@ -1,4 +1,6 @@
-export type Color = { nombre: string; hex: string };
+// imagen es opcional: la foto que muestra esa variante de color puntual.
+// Sin ella, elegir el color no cambia la foto principal.
+export type Color = { nombre: string; hex: string; imagen?: string };
 
 export type Producto = {
   id: string;

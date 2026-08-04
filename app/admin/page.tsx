@@ -30,11 +30,28 @@ const vacio = {
   descripcion: "",
   talles: "",
   colores: "",
+  imagenPorColor: {} as Record<string, string>,
 };
 
 type Formulario = typeof vacio;
 
+function parsearColores(texto: string): { nombre: string; hex: string }[] {
+  return texto
+    .split(",")
+    .map((c) => c.trim())
+    .filter(Boolean)
+    .map((par) => {
+      const [nombre, hex] = par.split(":").map((x) => x.trim());
+      return { nombre: nombre || "Color", hex: hex || "#CCCCCC" };
+    });
+}
+
 function productoAFormulario(p: Producto): Formulario {
+  const imagenPorColor: Record<string, string> = {};
+  p.colores.forEach((c) => {
+    if (c.imagen) imagenPorColor[c.nombre] = c.imagen;
+  });
+
   return {
     nombre: p.nombre,
     tipoPrecio: p.precio === null ? "consultar" : "fijo",
@@ -44,6 +61,7 @@ function productoAFormulario(p: Producto): Formulario {
     descripcion: p.descripcion,
     talles: p.talles.join(", "),
     colores: p.colores.map((c) => `${c.nombre}:${c.hex}`).join(", "),
+    imagenPorColor,
   };
 }
 
@@ -99,14 +117,10 @@ export default function Admin() {
       .filter(Boolean);
     if (talles.length === 0) return setError("Cargá al menos un talle.");
 
-    const colores = form.colores
-      .split(",")
-      .map((c) => c.trim())
-      .filter(Boolean)
-      .map((par) => {
-        const [nombre, hex] = par.split(":").map((x) => x.trim());
-        return { nombre: nombre || "Color", hex: hex || "#CCCCCC" };
-      });
+    const colores = parsearColores(form.colores).map((c) => ({
+      ...c,
+      imagen: form.imagenPorColor[c.nombre],
+    }));
     if (colores.length === 0)
       return setError("Cargá al menos un color, con el formato Nombre:#HEX.");
 
@@ -140,6 +154,15 @@ export default function Admin() {
         ? f.imagenes.filter((i) => i !== img)
         : [...f.imagenes, img],
     }));
+  }
+
+  function toggleImagenColor(nombreColor: string, img: string) {
+    setForm((f) => {
+      const actual = { ...f.imagenPorColor };
+      if (actual[nombreColor] === img) delete actual[nombreColor];
+      else actual[nombreColor] = img;
+      return { ...f, imagenPorColor: actual };
+    });
   }
 
   function editar(p: Producto) {
@@ -335,6 +358,51 @@ export default function Admin() {
                 portada. Tocá una foto de nuevo para sacarla.
               </p>
             </div>
+
+            {parsearColores(form.colores).length > 0 && (
+              <div className="flex flex-col gap-3">
+                <label className={etiqueta}>FOTO POR COLOR (opcional)</label>
+                {form.imagenes.length === 0 ? (
+                  <p className="text-[11px] text-[var(--color-text-muted)]">
+                    Elegí fotos arriba primero para poder asignarle una a cada color.
+                  </p>
+                ) : (
+                  parsearColores(form.colores).map((c) => (
+                    <div key={c.nombre} className="flex items-center gap-2.5">
+                      <span
+                        className="h-6 w-6 shrink-0 rounded-full border border-black/15"
+                        style={{ backgroundColor: c.hex }}
+                        title={c.nombre}
+                      />
+                      <span className="w-20 shrink-0 truncate text-[12.5px] text-[var(--color-bg-black)]">
+                        {c.nombre}
+                      </span>
+                      <div className="flex gap-1.5 overflow-x-auto">
+                        {form.imagenes.map((img) => {
+                          const asignada = form.imagenPorColor[c.nombre] === img;
+                          return (
+                            <button
+                              type="button"
+                              key={img}
+                              onClick={() => toggleImagenColor(c.nombre, img)}
+                              className={`relative h-9 w-9 shrink-0 overflow-hidden rounded-md border-2 transition-colors ${
+                                asignada ? "border-[var(--color-accent-blue)]" : "border-transparent hover:border-black/20"
+                              }`}
+                            >
+                              <Image src={img} alt="" fill sizes="36px" className="object-cover" />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))
+                )}
+                <p className="text-[11px] text-[var(--color-text-muted)]">
+                  Si no le asignás una foto a un color, elegirlo no cambia la imagen
+                  principal de la ficha.
+                </p>
+              </div>
+            )}
 
             {error && (
               <p className="rounded-xl bg-red-50 px-4 py-3 text-[13px] text-red-700">{error}</p>

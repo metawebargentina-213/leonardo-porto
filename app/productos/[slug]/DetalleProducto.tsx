@@ -43,9 +43,12 @@ export default function DetalleProducto({ slug }: { slug: string }) {
     if (producto) {
       setTalle(producto.talles[0] ?? "");
       setColor(producto.colores[0]?.nombre ?? "");
-      setImagenActiva(0);
     }
   }, [producto]);
+
+  useEffect(() => {
+    setImagenActiva(0);
+  }, [color]);
 
   if (!producto) {
     return (
@@ -75,6 +78,12 @@ export default function DetalleProducto({ slug }: { slug: string }) {
     .filter((p) => p.categoria === producto.categoria && p.id !== producto.id)
     .slice(0, 4);
 
+  // Si el color elegido tiene una foto propia, esa pasa a ser la portada de la galería.
+  const colorSeleccionado = producto.colores.find((c) => c.nombre === color);
+  const galeria = colorSeleccionado?.imagen
+    ? [colorSeleccionado.imagen, ...producto.imagenes.filter((img) => img !== colorSeleccionado.imagen)]
+    : producto.imagenes;
+
   return (
     <main className="min-h-screen bg-[var(--color-off-white)]">
       <div className="bg-[var(--color-bg-black)]">
@@ -98,7 +107,7 @@ export default function DetalleProducto({ slug }: { slug: string }) {
             <div className="relative rounded-[2rem] bg-black/[0.05] p-2 lg:rounded-[2.5rem] lg:p-2.5">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] bg-white lg:rounded-[2rem]">
                 <Image
-                  src={producto.imagenes[imagenActiva]}
+                  src={galeria[imagenActiva] ?? galeria[0]}
                   alt={producto.nombre}
                   fill
                   sizes="(max-width: 1023px) 100vw, 700px"
@@ -108,9 +117,9 @@ export default function DetalleProducto({ slug }: { slug: string }) {
               </div>
             </div>
 
-            {producto.imagenes.length > 1 && (
+            {galeria.length > 1 && (
               <div className="mt-3 flex gap-2.5 overflow-x-auto pb-1">
-                {producto.imagenes.map((img, i) => (
+                {galeria.map((img, i) => (
                   <button
                     key={img + i}
                     type="button"
