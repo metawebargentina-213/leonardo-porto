@@ -5,6 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { CATEGORIAS, Producto, generarSlug, textoPrecio } from "../catalogo";
 import { useCatalogo } from "../useCatalogo";
+import { useAdminAuth } from "./useAdminAuth";
+import { Login } from "./Login";
+import { CambiarPassword } from "./CambiarPassword";
 
 const IMAGENES = [
   "/images/D2Y3h.jpeg",
@@ -45,6 +48,7 @@ function productoAFormulario(p: Producto): Formulario {
 }
 
 export default function Admin() {
+  const { session, cargado: authCargado, entrar, salir } = useAdminAuth();
   const { productos, cargado, crear, actualizar, eliminar, restaurar } = useCatalogo();
   const [form, setForm] = useState<Formulario>(vacio);
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -52,6 +56,18 @@ export default function Admin() {
   const [aviso, setAviso] = useState("");
 
   const editando = editandoId !== null;
+
+  if (!authCargado) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#F4F4F2]">
+        <p className="text-sm text-[var(--color-text-muted)]">Cargando…</p>
+      </main>
+    );
+  }
+
+  if (!session) {
+    return <Login onEntrar={entrar} />;
+  }
 
   function limpiar() {
     setForm(vacio);
@@ -64,7 +80,7 @@ export default function Admin() {
     window.setTimeout(() => setAviso(""), 3000);
   }
 
-  function enviar(e: React.FormEvent) {
+  async function enviar(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
@@ -106,13 +122,12 @@ export default function Admin() {
       colores,
     };
 
-    if (editando) {
-      actualizar(producto);
-      mostrarAviso("Producto actualizado");
-    } else {
-      crear(producto);
-      mostrarAviso("Producto agregado");
+    const ok = editando ? await actualizar(producto) : await crear(producto);
+    if (!ok) {
+      setError("No se pudo guardar. Probá cerrar sesión y volver a entrar.");
+      return;
     }
+    mostrarAviso(editando ? "Producto actualizado" : "Producto agregado");
     limpiar();
   }
 
@@ -123,9 +138,10 @@ export default function Admin() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function borrar(p: Producto) {
+  async function borrar(p: Producto) {
     if (!window.confirm(`¿Eliminar "${p.nombre}"? Esta acción no se puede deshacer.`)) return;
-    eliminar(p.id);
+    const ok = await eliminar(p.id);
+    if (!ok) return mostrarAviso("No se pudo eliminar.");
     if (editandoId === p.id) limpiar();
     mostrarAviso("Producto eliminado");
   }
@@ -147,12 +163,21 @@ export default function Admin() {
               ADMINISTRACIÓN
             </span>
           </div>
-          <Link
-            href="/productos"
-            className="rounded-full border border-white/20 px-4 py-2 text-[13px] text-[var(--color-off-white)] transition-colors hover:bg-white/10"
-          >
-            Ver la tienda
-          </Link>
+          <div className="flex items-center gap-3">
+            <CambiarPassword />
+            <Link
+              href="/productos"
+              className="rounded-full border border-white/20 px-4 py-2 text-[13px] text-[var(--color-off-white)] transition-colors hover:bg-white/10"
+            >
+              Ver la tienda
+            </Link>
+            <button
+              onClick={() => salir()}
+              className="rounded-full border border-white/20 px-4 py-2 text-[13px] text-[var(--color-off-white)] transition-colors hover:bg-white/10"
+            >
+              Cerrar sesión
+            </button>
+          </div>
         </div>
       </header>
 
@@ -327,11 +352,11 @@ export default function Admin() {
               </p>
             </div>
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (window.confirm("¿Restaurar el catálogo original? Se pierden los cambios hechos acá.")) {
-                  restaurar();
+                  const ok = await restaurar();
                   limpiar();
-                  mostrarAviso("Catálogo restaurado");
+                  mostrarAviso(ok ? "Catálogo restaurado" : "No se pudo restaurar.");
                 }
               }}
               className="text-[13px] font-medium text-[var(--color-text-muted)] underline underline-offset-4 hover:text-[var(--color-bg-black)]"
@@ -406,9 +431,8 @@ export default function Admin() {
           )}
 
           <p className="mt-2 rounded-xl bg-amber-50 px-4 py-3 text-[12px] leading-relaxed text-amber-900">
-            <strong>Etapa de prueba:</strong> los cambios se guardan en este navegador para
-            poder probar el flujo completo. Al conectar la base de datos, van a guardarse
-            en el servidor y verse desde cualquier dispositivo.
+            Los cambios se guardan en la base de datos y se ven desde cualquier
+            dispositivo apenas se guardan.
           </p>
         </section>
       </div>

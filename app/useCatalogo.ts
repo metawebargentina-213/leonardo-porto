@@ -2,57 +2,58 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Producto, catalogoInicial } from "./catalogo";
-
-const CLAVE = "leonardo-porto:catalogo";
-
-// Etapa temporal: el catálogo vive en el navegador para poder probar el panel
-// sin backend. Al conectar Supabase, estas cuatro funciones pasan a ser queries.
-function leer(): Producto[] {
-  if (typeof window === "undefined") return catalogoInicial;
-  try {
-    const guardado = window.localStorage.getItem(CLAVE);
-    return guardado ? (JSON.parse(guardado) as Producto[]) : catalogoInicial;
-  } catch {
-    return catalogoInicial;
-  }
-}
-
-function guardar(productos: Producto[]) {
-  window.localStorage.setItem(CLAVE, JSON.stringify(productos));
-  window.dispatchEvent(new Event("catalogo-actualizado"));
-}
+import { supabase } from "./supabaseClient";
 
 export function useCatalogo() {
-  const [productos, setProductos] = useState<Producto[]>(catalogoInicial);
+  const [productos, setProductos] = useState<Producto[]>([]);
   const [cargado, setCargado] = useState(false);
 
-  useEffect(() => {
-    const sincronizar = () => setProductos(leer());
-    sincronizar();
+  const sincronizar = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("productos")
+      .select("*")
+      .order("creado_en", { ascending: true });
+    if (!error && data) setProductos(data as Producto[]);
     setCargado(true);
-    window.addEventListener("catalogo-actualizado", sincronizar);
-    window.addEventListener("storage", sincronizar);
-    return () => {
-      window.removeEventListener("catalogo-actualizado", sincronizar);
-      window.removeEventListener("storage", sincronizar);
-    };
   }, []);
 
-  const crear = useCallback((producto: Producto) => {
-    guardar([...leer(), producto]);
-  }, []);
+  useEffect(() => {
+    sincronizar();
+  }, [sincronizar]);
 
-  const actualizar = useCallback((producto: Producto) => {
-    guardar(leer().map((p) => (p.id === producto.id ? producto : p)));
-  }, []);
+  const crear = useCallback(
+    async (producto: Producto) => {
+      const { error } = await supabase.from("productos").insert(producto);
+      await sincronizar();
+      return !error;
+    },
+    [sincronizar]
+  );
 
-  const eliminar = useCallback((id: string) => {
-    guardar(leer().filter((p) => p.id !== id));
-  }, []);
+  const actualizar = useCallback(
+    async (producto: Producto) => {
+      const { error } = await supabase.from("productos").update(producto).eq("id", producto.id);
+      await sincronizar();
+      return !error;
+    },
+    [sincronizar]
+  );
 
-  const restaurar = useCallback(() => {
-    guardar(catalogoInicial);
-  }, []);
+  const eliminar = useCallback(
+    async (id: string) => {
+      const { error } = await supabase.from("productos").delete().eq("id", id);
+      await sincronizar();
+      return !error;
+    },
+    [sincronizar]
+  );
+
+  const restaurar = useCallback(async () => {
+    const { error: errorBorrado } = await supabase.from("productos").delete().neq("id", "");
+    const { error: errorInsercion } = await supabase.from("productos").insert(catalogoInicial);
+    await sincronizar();
+    return !errorBorrado && !errorInsercion;
+  }, [sincronizar]);
 
   return { productos, cargado, crear, actualizar, eliminar, restaurar };
 }

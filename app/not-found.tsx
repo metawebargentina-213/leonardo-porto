@@ -8,7 +8,8 @@ import DetalleProducto from "./productos/[slug]/DetalleProducto";
 
 // El sitio se exporta como estático, así que solo existen las páginas de los
 // productos presentes al compilar. Un producto creado después desde el panel cae
-// acá: resolvemos su slug contra el catálogo del navegador y mostramos su ficha.
+// acá: resolvemos su slug contra Supabase (vía useCatalogo, dentro de DetalleProducto)
+// y mostramos su ficha igual, ya sin depender de que sea el mismo navegador/dispositivo.
 export default function NoEncontrado() {
   const [slug, setSlug] = useState<string | null>(null);
   const [listo, setListo] = useState(false);
