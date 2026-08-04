@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CarritoDrawer } from "./CarritoDrawer";
 import { useCarrito } from "./useCarrito";
 
@@ -15,7 +16,19 @@ const navLinks = [
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [carritoAbierto, setCarritoAbierto] = useState(false);
+  const [buscadorAbierto, setBuscadorAbierto] = useState(false);
+  const [busqueda, setBusqueda] = useState("");
   const { cantidadTotal } = useCarrito();
+  const router = useRouter();
+
+  function buscar(e: React.FormEvent) {
+    e.preventDefault();
+    if (!busqueda.trim()) return;
+    router.push(`/productos?buscar=${encodeURIComponent(busqueda.trim())}`);
+    setBuscadorAbierto(false);
+    setBusqueda("");
+    setOpen(false);
+  }
 
   return (
     <div className="flex justify-center px-5 pt-6 pb-4 md:pt-8 md:pb-6">
@@ -41,13 +54,43 @@ export function Nav() {
           ))}
         </div>
 
-        <div className="flex items-center gap-4 text-[var(--color-off-white)] md:gap-5">
-          <button aria-label="Buscar" className="transition-opacity hover:opacity-70">
+        <div className="relative flex items-center gap-4 text-[var(--color-off-white)] md:gap-5">
+          <button
+            aria-label="Buscar"
+            aria-expanded={buscadorAbierto}
+            onClick={() => setBuscadorAbierto((v) => !v)}
+            className="transition-opacity hover:opacity-70"
+          >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
               <circle cx="11" cy="11" r="7.5" />
               <line x1="21" y1="21" x2="16.2" y2="16.2" />
             </svg>
           </button>
+
+          {buscadorAbierto && (
+            <form
+              onSubmit={buscar}
+              className="absolute top-[calc(100%+12px)] right-0 z-20 flex w-[260px] items-center gap-2 rounded-full bg-[var(--color-bg-black)] p-1.5 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)] ring-1 ring-white/15 sm:w-[300px]"
+            >
+              <input
+                autoFocus
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                placeholder="Buscar prendas…"
+                className="w-full bg-transparent px-4 py-2 text-[13px] text-[var(--color-off-white)] placeholder:text-[var(--color-text-muted)] focus:outline-none"
+              />
+              <button
+                type="submit"
+                aria-label="Buscar"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-blue)] text-white"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <circle cx="11" cy="11" r="7.5" />
+                  <line x1="21" y1="21" x2="16.2" y2="16.2" />
+                </svg>
+              </button>
+            </form>
+          )}
           <button
             aria-label="Carrito"
             onClick={() => setCarritoAbierto(true)}

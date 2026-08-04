@@ -1,18 +1,21 @@
 import Image from "next/image";
+import Link from "next/link";
+import { WHATSAPP_NUMERO } from "./catalogo";
+import { GuiaTalles } from "./GuiaTalles";
 
 export const SHELL = "mx-auto w-full max-w-[1440px] px-5 md:px-10 lg:px-20";
 
-const footerColumns = [
-  { title: "PRODUCTOS", items: ["Hombre", "Abrigos", "Accesorios"] },
-  {
-    title: "AYUDA",
-    items: ["Envíos", "Cambios y devoluciones", "Guía de talles", "Contacto"],
-  },
-  {
-    title: "EMPRESA",
-    items: ["Sobre Leonardo Porto", "Sustentabilidad", "Trabajá con nosotros"],
-  },
+const linkContacto = WHATSAPP_NUMERO
+  ? `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent("Hola! Tengo una consulta.")}`
+  : `https://wa.me/?text=${encodeURIComponent("Hola! Tengo una consulta.")}`;
+
+const productosColumna = [
+  { label: "Hombre", href: "/productos" },
+  { label: "Abrigos", href: "/productos?categoria=Abrigos" },
+  { label: "Accesorios", href: "/productos?categoria=Accesorios" },
 ];
+
+const empresaColumna = ["Sobre Leonardo Porto", "Sustentabilidad", "Trabajá con nosotros"];
 
 export function ArrowIcon({ className }: { className?: string }) {
   return (
@@ -83,18 +86,58 @@ export function Footer() {
           </div>
 
           <div className="grid grid-cols-2 gap-8 text-center sm:grid-cols-4 sm:text-left lg:flex lg:gap-16">
-            {footerColumns.map((col) => (
-              <div key={col.title} className="flex flex-col items-center gap-3.5 sm:items-start">
-                <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
-                  {col.title}
+            <div className="flex flex-col items-center gap-3.5 sm:items-start">
+              <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
+                PRODUCTOS
+              </span>
+              {productosColumna.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className="flex flex-col items-center gap-3.5 sm:items-start">
+              <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
+                AYUDA
+              </span>
+              <span className="text-sm text-[var(--color-text-muted)]">Envíos</span>
+              <span className="text-sm text-[var(--color-text-muted)]">Cambios y devoluciones</span>
+              <GuiaTalles>
+                {(abrir) => (
+                  <button
+                    type="button"
+                    onClick={abrir}
+                    className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
+                  >
+                    Guía de talles
+                  </button>
+                )}
+              </GuiaTalles>
+              <a
+                href={linkContacto}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
+              >
+                Contacto
+              </a>
+            </div>
+
+            <div className="flex flex-col items-center gap-3.5 sm:items-start">
+              <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">
+                EMPRESA
+              </span>
+              {empresaColumna.map((item) => (
+                <span key={item} className="text-sm text-[var(--color-text-muted)]">
+                  {item}
                 </span>
-                {col.items.map((item) => (
-                  <span key={item} className="text-sm text-[var(--color-text-muted)]">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            ))}
+              ))}
+            </div>
 
             <div className="flex flex-col items-center gap-3.5 sm:items-start">
               <span className="text-xs font-bold tracking-wide text-[var(--color-off-white)]">

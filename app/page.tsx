@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "./Nav";
 import { Eyebrow, Footer, PillButton, SHELL } from "./ui";
-import { catalogoInicial, textoPrecio } from "./catalogo";
+import { textoPrecio } from "./catalogo";
+import { useCatalogo } from "./useCatalogo";
 
 const categories = [
   { label: "Hombre", image: "/images/4DRhU.jpeg", href: "/productos" },
@@ -10,9 +13,10 @@ const categories = [
   { label: "Accesorios", image: "/images/aVVsm.jpeg", href: "/productos?categoria=Accesorios" },
 ];
 
-const products = catalogoInicial.slice(0, 4);
-
 export default function Home() {
+  const { productos } = useCatalogo();
+  const products = productos.slice(0, 4);
+
   return (
     <main className="min-h-screen bg-[var(--color-off-white)]">
       {/* Header + Hero */}

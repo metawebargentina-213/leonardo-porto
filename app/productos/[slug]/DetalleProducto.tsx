@@ -8,6 +8,7 @@ import { Footer, SHELL } from "../../ui";
 import { armarLinkWhatsapp, textoPrecio, WHATSAPP_NUMERO } from "../../catalogo";
 import { useCatalogo } from "../../useCatalogo";
 import { useCarrito } from "../../useCarrito";
+import { GuiaTalles } from "../../GuiaTalles";
 
 function BolsaIcon({ className }: { className?: string }) {
   return (
@@ -132,9 +133,17 @@ export default function DetalleProducto({ slug }: { slug: string }) {
                 <span className="text-[11px] font-semibold tracking-[0.2em] text-[var(--color-bg-black)]">
                   TALLE
                 </span>
-                <span className="text-[13px] text-[var(--color-text-muted)]">
-                  Guía de talles
-                </span>
+                <GuiaTalles>
+                  {(abrir) => (
+                    <button
+                      type="button"
+                      onClick={abrir}
+                      className="text-[13px] text-[var(--color-text-muted)] underline underline-offset-4 transition-colors hover:text-[var(--color-bg-black)]"
+                    >
+                      Guía de talles
+                    </button>
+                  )}
+                </GuiaTalles>
               </div>
               <div className="flex flex-wrap gap-2.5">
                 {producto.talles.map((t) => (

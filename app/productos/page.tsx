@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Nav } from "../Nav";
 import { Footer, SHELL } from "../ui";
 import { CATEGORIAS, textoPrecio } from "../catalogo";
@@ -11,11 +12,31 @@ import { Filtros } from "./Filtros";
 
 type Orden = "destacados" | "menor" | "mayor";
 
-export default function Productos() {
+export default function ProductosPage() {
+  return (
+    <Suspense fallback={null}>
+      <Productos />
+    </Suspense>
+  );
+}
+
+function Productos() {
+  const searchParams = useSearchParams();
   const { productos, cargado } = useCatalogo();
   const [categoria, setCategoria] = useState<string>("Todos");
   const [talle, setTalle] = useState<string>("Todos");
   const [orden, setOrden] = useState<Orden>("destacados");
+  const [buscar, setBuscar] = useState<string>("");
+
+  const categoriaUrl = searchParams.get("categoria");
+  const buscarUrl = searchParams.get("buscar");
+
+  useEffect(() => {
+    if (categoriaUrl && [...CATEGORIAS].includes(categoriaUrl as (typeof CATEGORIAS)[number])) {
+      setCategoria(categoriaUrl);
+    }
+    if (buscarUrl) setBuscar(buscarUrl);
+  }, [categoriaUrl, buscarUrl]);
 
   const tallesDisponibles = useMemo(() => {
     const todos = productos.flatMap((p) => p.talles);
@@ -23,10 +44,12 @@ export default function Productos() {
   }, [productos]);
 
   const filtrados = useMemo(() => {
+    const busquedaNormalizada = buscar.trim().toLowerCase();
     const lista = productos.filter((p) => {
       const porCategoria = categoria === "Todos" || p.categoria === categoria;
       const porTalle = talle === "Todos" || p.talles.includes(talle);
-      return porCategoria && porTalle;
+      const porBusqueda = !busquedaNormalizada || p.nombre.toLowerCase().includes(busquedaNormalizada);
+      return porCategoria && porTalle && porBusqueda;
     });
 
     // Los productos "a consultar" (sin precio) van siempre al final al ordenar por precio.
@@ -43,9 +66,9 @@ export default function Productos() {
         return b.precio - a.precio;
       });
     return lista;
-  }, [productos, categoria, talle, orden]);
+  }, [productos, categoria, talle, orden, buscar]);
 
-  const hayFiltros = categoria !== "Todos" || talle !== "Todos";
+  const hayFiltros = categoria !== "Todos" || talle !== "Todos" || buscar.trim() !== "";
 
   return (
     <main className="min-h-screen bg-[var(--color-off-white)]">
@@ -76,12 +99,21 @@ export default function Productos() {
           limpiar={() => {
             setCategoria("Todos");
             setTalle("Todos");
+            setBuscar("");
           }}
         />
 
         <div className="flex min-w-0 flex-1 flex-col gap-6">
           <p className="text-sm text-[var(--color-text-muted)]">
-            {filtrados.length} {filtrados.length === 1 ? "producto" : "productos"}
+            {buscar.trim() ? (
+              <>
+                {filtrados.length} {filtrados.length === 1 ? "resultado" : "resultados"} para &quot;{buscar}&quot;
+              </>
+            ) : (
+              <>
+                {filtrados.length} {filtrados.length === 1 ? "producto" : "productos"}
+              </>
+            )}
           </p>
 
           {/* Grilla */}
