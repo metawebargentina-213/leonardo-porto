@@ -66,7 +66,7 @@ export function GuiaTalles({ children }: { children: (abrir: () => void) => Reac
         className={`fixed inset-x-0 bottom-0 z-[90] flex max-h-[85vh] flex-col rounded-t-[2rem] bg-white p-6 transition-transform duration-300 ease-out sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[440px] sm:-translate-x-1/2 sm:rounded-[1.75rem] sm:p-8 ${
           abierto
             ? "translate-y-0 sm:-translate-y-1/2"
-            : "translate-y-full sm:-translate-y-[calc(50%-24px)] sm:opacity-0"
+            : "pointer-events-none translate-y-full sm:-translate-y-[calc(50%-24px)] sm:opacity-0"
         }`}
       >
         <div className="flex items-center justify-between">
