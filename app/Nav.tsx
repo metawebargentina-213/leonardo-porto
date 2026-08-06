@@ -61,7 +61,7 @@ export function Nav() {
             aria-label="Buscar"
             aria-expanded={buscadorAbierto}
             onClick={() => setBuscadorAbierto((v) => !v)}
-            className="transition-opacity hover:opacity-70"
+            className="-m-2.5 p-2.5 transition-opacity hover:opacity-70"
           >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
               <circle cx="11" cy="11" r="7.5" />
@@ -93,49 +93,59 @@ export function Nav() {
               </button>
             </form>
           )}
-          <Link href="/favoritos" aria-label="Favoritos" className="relative transition-opacity hover:opacity-70">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-              <path d="M12 20.5s-7.5-4.6-10-9.3C.5 7.8 2.3 4.5 5.7 4c2.1-.3 4.2.8 6.3 3.3C14.1 4.8 16.2 3.7 18.3 4c3.4.5 5.2 3.8 3.7 7.2-2.5 4.7-10 9.3-10 9.3z" />
-            </svg>
-            {cantidadFavoritos > 0 && (
-              <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent-blue)] px-1 text-[9px] font-bold text-white">
-                {cantidadFavoritos}
-              </span>
-            )}
+          <Link
+            href="/favoritos"
+            aria-label="Favoritos"
+            className="-m-2.5 block p-2.5 transition-opacity hover:opacity-70"
+          >
+            <span className="relative block h-[17px] w-[17px]">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+                <path d="M12 20.5s-7.5-4.6-10-9.3C.5 7.8 2.3 4.5 5.7 4c2.1-.3 4.2.8 6.3 3.3C14.1 4.8 16.2 3.7 18.3 4c3.4.5 5.2 3.8 3.7 7.2-2.5 4.7-10 9.3-10 9.3z" />
+              </svg>
+              {cantidadFavoritos > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent-blue)] px-1 text-[9px] font-bold text-white">
+                  {cantidadFavoritos}
+                </span>
+              )}
+            </span>
           </Link>
 
           <button
             aria-label="Carrito"
             onClick={() => setCarritoAbierto(true)}
-            className="relative transition-opacity hover:opacity-70"
+            className="-m-2.5 p-2.5 transition-opacity hover:opacity-70"
           >
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-              <path d="M6.5 8.5h11l1 12.5h-13z" />
-              <path d="M9 8.5v-2a3 3 0 0 1 6 0v2" />
-            </svg>
-            {cantidadTotal > 0 && (
-              <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent-blue)] px-1 text-[9px] font-bold text-white">
-                {cantidadTotal}
-              </span>
-            )}
+            <span className="relative block h-[17px] w-[17px]">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+                <path d="M6.5 8.5h11l1 12.5h-13z" />
+                <path d="M9 8.5v-2a3 3 0 0 1 6 0v2" />
+              </svg>
+              {cantidadTotal > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent-blue)] px-1 text-[9px] font-bold text-white">
+                  {cantidadTotal}
+                </span>
+              )}
+            </span>
           </button>
 
           <button
             aria-label="Menú"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="relative h-4 w-5 md:hidden"
+            className="-m-2.5 p-2.5 md:hidden"
           >
-            <span
-              className={`absolute left-0 block h-[1.5px] w-5 bg-current transition-transform duration-300 ${
-                open ? "top-1/2 rotate-45" : "top-1"
-              }`}
-            />
-            <span
-              className={`absolute left-0 block h-[1.5px] w-5 bg-current transition-transform duration-300 ${
-                open ? "top-1/2 -rotate-45" : "top-[11px]"
-              }`}
-            />
+            <span className="relative block h-4 w-5">
+              <span
+                className={`absolute left-0 block h-[1.5px] w-5 bg-current transition-transform duration-300 ${
+                  open ? "top-1/2 rotate-45" : "top-1"
+                }`}
+              />
+              <span
+                className={`absolute left-0 block h-[1.5px] w-5 bg-current transition-transform duration-300 ${
+                  open ? "top-1/2 -rotate-45" : "top-[11px]"
+                }`}
+              />
+            </span>
           </button>
         </div>
       </nav>

@@ -94,7 +94,7 @@ export function Footer() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
+                  className="-my-2 py-2 text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
                 >
                   {item.label}
                 </Link>
@@ -112,7 +112,7 @@ export function Footer() {
                   <button
                     type="button"
                     onClick={abrir}
-                    className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
+                    className="-my-2 py-2 text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
                   >
                     Guía de talles
                   </button>
@@ -122,7 +122,7 @@ export function Footer() {
                 href={linkContacto}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
+                className="-my-2 py-2 text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-off-white)]"
               >
                 Contacto
               </a>
